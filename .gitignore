@@ -1,0 +1,19 @@
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Backend (.NET)
+backend/**/bin/
+backend/**/obj/
+backend/**/.vs/
+*.user
+*.suo
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+
+# Env / secrets (if you add any)
+.env
+.env.local
