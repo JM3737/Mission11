@@ -29,7 +29,10 @@ export default defineConfig([
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': [
         'warn',
-        { allowConstantExport: true },
+        {
+          allowConstantExport: true,
+          allowExportNames: ['useCart', 'CONTINUE_SNAPSHOT_KEY'],
+        },
       ],
       'prettier/prettier': 'error',
     },
