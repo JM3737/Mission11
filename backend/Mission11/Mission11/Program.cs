@@ -14,41 +14,15 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.KnownProxies.Clear();
 });
 builder.Services.AddControllers();
+// Public book API: allow browser fetch() from any origin (Static Web Apps, localhost, etc.).
+// Opening /api/books in a new tab never hits CORS; the React app does, so this must be permissive.
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
         "AllowFrontend",
         policy =>
         {
-            policy
-                .SetIsOriginAllowed(static origin =>
-                {
-                    if (string.IsNullOrEmpty(origin))
-                    {
-                        return false;
-                    }
-
-                    if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri))
-                    {
-                        return false;
-                    }
-
-                    // Local Vite dev server
-                    if (uri.Host == "localhost" || uri.Host == "127.0.0.1")
-                    {
-                        return true;
-                    }
-
-                    // Azure Static Web Apps (production, preview, and regional hostnames)
-                    if (uri.Host.EndsWith(".azurestaticapps.net", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return true;
-                    }
-
-                    return false;
-                })
-                .AllowAnyHeader()
-                .AllowAnyMethod();
+            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
         }
     );
 });
@@ -59,8 +33,8 @@ builder.Services.AddDbContext<BookstoreContext>(options =>
 var app = builder.Build();
 
 app.UseForwardedHeaders();
-app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
+app.UseHttpsRedirection();
 app.UseAuthorization();
 
 // Root URL: helps verify the app is running on Azure (otherwise "/" had no route).
