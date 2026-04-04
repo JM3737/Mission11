@@ -21,10 +21,32 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins(
-                    "http://localhost:5173",
-                    "https://white-island-0faf9d81e.2.azurestaticapps.net"
-                )
+                .SetIsOriginAllowed(static origin =>
+                {
+                    if (string.IsNullOrEmpty(origin))
+                    {
+                        return false;
+                    }
+
+                    if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+                    {
+                        return false;
+                    }
+
+                    // Local Vite dev server
+                    if (uri.Host == "localhost" || uri.Host == "127.0.0.1")
+                    {
+                        return true;
+                    }
+
+                    // Azure Static Web Apps (production, preview, and regional hostnames)
+                    if (uri.Host.EndsWith(".azurestaticapps.net", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                })
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         }
