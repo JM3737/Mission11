@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Toast } from 'bootstrap';
+import { API_BASE_URL } from '../apiConfig';
 import { useCart, type ListSnapshot } from '../context/CartContext';
 
 type Book = {
@@ -18,8 +19,6 @@ type BooksApiResponse = {
   books: Book[];
   totalNumBooks: number;
 };
-
-const API = 'http://localhost:5140';
 
 export function BookListPage() {
   const location = useLocation();
@@ -60,7 +59,7 @@ export function BookListPage() {
   useEffect(() => {
     async function loadCategories() {
       try {
-        const res = await fetch(`${API}/api/books/categories`);
+        const res = await fetch(`${API_BASE_URL}/api/books/categories`);
         if (!res.ok) throw new Error('categories');
         const data = (await res.json()) as string[];
         setCategories(data);
@@ -82,7 +81,7 @@ export function BookListPage() {
             ? `&category=${encodeURIComponent(category)}`
             : '';
         const response = await fetch(
-          `${API}/api/books?pageSize=${pageSize}&pageNum=${pageNum}&sortOrder=${sortOrder}${catParam}`
+          `${API_BASE_URL}/api/books?pageSize=${pageSize}&pageNum=${pageNum}&sortOrder=${sortOrder}${catParam}`
         );
 
         if (!response.ok) {

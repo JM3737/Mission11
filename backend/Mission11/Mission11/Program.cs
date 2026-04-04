@@ -21,7 +21,10 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins("http://localhost:5173")
+                .WithOrigins(
+                    "http://localhost:5173",
+                    "https://white-island-0faf9d81e.2.azurestaticapps.net"
+                )
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         }

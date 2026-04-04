@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-
-const API = 'http://localhost:5140';
+import { API_BASE_URL } from '../apiConfig';
 
 type Book = {
   bookId: number;
@@ -36,7 +35,7 @@ export function AdminBooksPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API}/api/books/all`);
+      const res = await fetch(`${API_BASE_URL}/api/books/all`);
       if (!res.ok) throw new Error('Could not load books.');
       const data = (await res.json()) as Book[];
       setBooks(data);
@@ -86,7 +85,7 @@ export function AdminBooksPage() {
       };
 
       if (editingId === null) {
-        const res = await fetch(`${API}/api/books`, {
+        const res = await fetch(`${API_BASE_URL}/api/books`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
@@ -96,7 +95,7 @@ export function AdminBooksPage() {
           throw new Error(text || 'Could not add book.');
         }
       } else {
-        const res = await fetch(`${API}/api/books/${editingId}`, {
+        const res = await fetch(`${API_BASE_URL}/api/books/${editingId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
@@ -126,7 +125,7 @@ export function AdminBooksPage() {
     }
     setError(null);
     try {
-      const res = await fetch(`${API}/api/books/${book.bookId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/books/${book.bookId}`, {
         method: 'DELETE',
       });
       if (!res.ok) throw new Error('Could not delete book.');
