@@ -30,6 +30,11 @@ export function Layout() {
                 </Link>
               </li>
               <li className="nav-item">
+                <Link className="nav-link" to="/adminbooks">
+                  Admin books
+                </Link>
+              </li>
+              <li className="nav-item">
                 <Link className="nav-link" to="/cart">
                   Cart
                   {totalItemCount > 0 && (
