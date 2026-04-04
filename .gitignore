@@ -6,6 +6,9 @@ frontend/dist/
 backend/**/bin/
 backend/**/obj/
 backend/**/.vs/
+
+# Unrelated lab/console projects (not part of the bookstore)
+backend/Section*/
 *.user
 *.suo
 
